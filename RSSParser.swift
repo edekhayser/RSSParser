@@ -8,20 +8,20 @@
 import UIKit
 
 protocol RSSParserDelegate{
-	func parserDidFailWithError(error: NSError) -> Void
-	func parserDidCompleteSuccessfully(posts: Array<Dictionary<String,String>>) -> Void
-	func parserDidBegin() -> Void
+	func parserDidFailWithError(error: NSError)
+	func parserDidCompleteSuccessfully(posts: [[String:String]])
+	func parserDidBegin()
 }
 
 class RSSParser: NSObject, NSXMLParserDelegate{
 	
 	var parser: NSXMLParser = NSXMLParser()
-	var posts: Array <Dictionary <String, String> > = []
-	var elements: Dictionary <String, String> = [:]
+	var posts: [[String:String]] = []
+	var elements: [String:String] = [:]
 	var element: String = ""
 	var title: String = ""
-	var	date: String = ""
-	var	summary: String = ""
+	var date: String = ""
+	var summary: String = ""
 	var link: String = ""
 	var delegate: XMLParserDelegate?
 	
@@ -37,7 +37,7 @@ class RSSParser: NSObject, NSXMLParserDelegate{
 		beginParsing(url)
 	}
 	
-	func rssPosts() -> Array< Dictionary <String, String> >{
+	func rssPosts() -> [[String:String]]{
 		return self.posts
 	}
 	
@@ -52,7 +52,7 @@ class RSSParser: NSObject, NSXMLParserDelegate{
 		parser.parse()
 	}
 	
-	// #pragma mark NSXMLParser Delegate Methods
+	//MARK: NSXMLParser Delegate Methods
 	
 	func parserDidStartDocument(parser: NSXMLParser!){
 		self.delegate?.parserDidBegin()
@@ -101,8 +101,8 @@ class RSSParser: NSObject, NSXMLParserDelegate{
 				summary += string
 			case "link":
 				link += string.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-		default:
-			break
+			default:
+				break
 		}
 	}
 }
